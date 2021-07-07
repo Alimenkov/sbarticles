@@ -1,0 +1,11 @@
+{% if  icons|length > 0 %}
+    <ul class="list-inline mb-0">
+        {% for icon in icons %}
+
+            <li class="list-inline-item mr-3">
+                <a title="{{ icon.name }}" href="{{ icon.link }}"><i class="fab fa-{{ icon.code }} fa-2x fa-fw"></i></a>
+            </li>
+
+        {% endfor %}
+    </ul>
+{% endif %}
