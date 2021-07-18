@@ -1,0 +1,21 @@
+{% extends "emails/base.html.twig" %}
+
+{% block title %}
+    Подтверждение регистрации
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <table>
+            <tr>
+                <td>
+                    {% block titles %}
+
+                        <h1>Подтвердите ваш акаунт {{ email.toName }}!</h1>
+                        <a href="{{ signedUrl }}">Подтвердить регистрацию</a>
+                    {% endblock %}
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

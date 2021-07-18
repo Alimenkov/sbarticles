@@ -23,23 +23,33 @@
 
 <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
-        <span class="navbar-brand">BlaBlaArticle</span>
+        <a href="{{ path('app_mainpage') }}"><span class="navbar-brand">BlaBlaArticle</span></a>
         <a class="js-scroll-trigger" href="#services">Сервисы</a>
-        <a class="js-scroll-trigger" href="#author">Автор</a>
-        <a class="btn btn-primary" href="login.html">Войти</a>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <a class="js-scroll-trigger" href="#author">Автор</a>
+            <a class="btn btn-primary" href="{{ path('app_logout') }}">Выйти</a>
+        {% else %}
+            <a class="btn btn-primary" href="{{ path('app_login') }}">Войти</a>
+        {% endif %}
     </div>
 </nav>
 
-
-{% block body %}
-
+{% for flashMessage in app.flashes('security_message') %}
+    <div class="alert alert-info" role="alert">{{ flashMessage }}</div>
+{% endfor %}
+{% block verified_message %}
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and is_granted('IS_VERIFIED') == false %}
+        <div class="alert alert-info" role="alert">Ваш аккаунт не верифицирован! <a
+                    href="{{ path('app_account_verification') }}">Отправить письмо с подтверждением ещё раз</a></div>
+    {% endif %}
 {% endblock %}
+{% block body %}{% endblock %}
 
 <footer class="footer bg-light">
     <div class="container">
         <div class="row">
             <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
-                <p class="text-muted small mb-4 mb-lg-0">&copy; BlaBlaArticle 2020.</p>
+                <p class="text-muted small mb-4 mb-lg-0">&copy; BlaBlaArticle {{ "now"|date("Y") }}.</p>
             </div>
             <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
 

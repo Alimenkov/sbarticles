@@ -2,6 +2,9 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     form_themes: ['bootstrap_4_layout.html.twig', 'forms/bootstrap_default.html.twig']
 
+    paths:
+        'public/css/emails': css
+
 when@test:
     twig:
         strict_variables: true
