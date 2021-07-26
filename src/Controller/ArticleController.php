@@ -15,4 +15,14 @@ class ArticleController extends AbstractController
     {
         return $this->render('mainpage.html.twig');
     }
+
+    /**
+     * @Route("/article-create", name="app_article_create")
+     */
+    public function article_create(): Response
+    {
+
+
+        return $this->render('articles/create.html.twig');
+    }
 }

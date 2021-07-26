@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\LoginFormType;
 use App\Form\Model\UserLoginFormModel;
 use App\Form\RegistrationFormType;
+use App\Security\Utils\AuthenticationRemeberMeUtils;
 use App\Service\Email\SendUserEmailConfirmation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +17,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
@@ -25,7 +25,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="app_login")
      */
-    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
+    public function login(AuthenticationRemeberMeUtils $authenticationUtils, Request $request): Response
     {
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
@@ -37,9 +37,13 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        $rememberMe = $authenticationUtils->getRememberMe();
+
         $userLoginFormModel = new UserLoginFormModel();
 
         $userLoginFormModel->email = $lastUsername;
+
+        $userLoginFormModel->_remember_me = $rememberMe;
 
         $form = $this->createForm(LoginFormType::class, $userLoginFormModel);
 
@@ -103,7 +107,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/account_verification", name="app_account_verification")
+     * @Route("/account-verification", name="app_account_verification")
      * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
      */
     public function accountVerification(SendUserEmailConfirmation $emailConfirmation, UrlGeneratorInterface $urlGenerator): Response
@@ -119,13 +123,13 @@ class SecurityController extends AbstractController
             $text = 'На ваш e-mail выслано письмо для верификации аккаунта!';
         }
 
-        return $this->render('security/account_verification.html.twig',
+        return $this->render('security/account-verification.html.twig',
             ['text' => $text]
         );
     }
 
     /**
-     * @Route("/rigister_confirmation", name="app_rigister_confirmation")
+     * @Route("/rigister-confirmation", name="app_rigister_confirmation")
      */
     public function registerConfirmation(Request $request, VerifyEmailHelperInterface $helper)
     {

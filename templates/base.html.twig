@@ -23,7 +23,14 @@
 
 <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
-        <a href="{{ path('app_mainpage') }}"><span class="navbar-brand">BlaBlaArticle</span></a>
+
+        {% if app.request.get('_route')  != 'app_mainpage' %}
+            <a href="{{ path('app_mainpage') }}"><span class="navbar-brand">BlaBlaArticle</span></a>
+        {% else %}
+            <span class="navbar-brand">BlaBlaArticle</span>
+        {% endif %}
+
+        <a class="js-scroll-trigger" href="{{ path('app_article_create') }}">Создать статью</a>
         <a class="js-scroll-trigger" href="#services">Сервисы</a>
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <a class="js-scroll-trigger" href="#author">Автор</a>
@@ -40,7 +47,7 @@
 {% block verified_message %}
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and is_granted('IS_VERIFIED') == false %}
         <div class="alert alert-info" role="alert">Ваш аккаунт не верифицирован! <a
-                    href="{{ path('app_account_verification') }}">Отправить письмо с подтверждением ещё раз</a></div>
+                    href="{{ path('app_account-verification') }}">Отправить письмо с подтверждением ещё раз</a></div>
     {% endif %}
 {% endblock %}
 {% block body %}{% endblock %}

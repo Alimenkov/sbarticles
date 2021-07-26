@@ -9,13 +9,25 @@ abstract class BaseFixtures extends Fixture
 {
     abstract public function load(ObjectManager $manager);
 
-    protected function make(string $class, callable $function, int $count): void
+    public function makeOne(string $class, callable $factory)
     {
-        for ($n = 0; $n < $count; $n++) {
+        $entity = new $class();
 
-            $entity = new $class();
+        $factory($entity);
+    }
 
-            $function($entity);
+    protected function getIndexReference($className, $key)
+    {
+        $reference = $this->getReference($className . "|$key");
+
+        if (empty($reference)) {
+            throw new \Exception('Не найдены ссылки на класс: ' . $className);
         }
+
+      /*  if (empty($references[$key])) {
+            throw new \Exception('Не найден объект по ключу: ' . $key);
+        }*/
+
+        return $reference;
     }
 }
