@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Module;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\Validator\Constraints\Date;
 
 
 class ModuleFixtures extends BaseFixtures implements DependentFixtureInterface
@@ -88,7 +89,8 @@ class ModuleFixtures extends BaseFixtures implements DependentFixtureInterface
 
                 $module
                     ->setName($fields['name'])
-                    ->setContent($fields['content']);
+                    ->setContent($fields['content'])
+                    ->setModifiedAt(new \DateTime());
 
                 $manager->persist($module);
 

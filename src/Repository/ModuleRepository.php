@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Module;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,22 +20,20 @@ class ModuleRepository extends ServiceEntityRepository
         parent::__construct($registry, Module::class);
     }
 
-    // /**
-    //  * @return Module[] Returns an array of Module objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Module[] Returns an array of Module objects
+     */
+
+    public function findAllUserModules(int $id): Query
     {
         return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+            ->leftJoin('m.owner', 'o')
+            ->andWhere('o.id = :val or o.id is NULL')
+            ->setParameter('val', $id)
+            ->orderBy('m.modifiedAt', 'DESC')
+            ->getQuery();
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Module

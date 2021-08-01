@@ -54,9 +54,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $modules;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserSubscription::class, mappedBy="owner")
+     */
+    private $userSubscriptions;
+
     public function __construct()
     {
         $this->modules = new ArrayCollection();
+        $this->userSubscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,6 +185,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->modules->removeElement($module)) {
             $module->removeOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserSubscription[]
+     */
+    public function getUserSubscriptions(): Collection
+    {
+        return $this->userSubscriptions;
+    }
+
+    public function addUserSubscription(UserSubscription $userSubscription): self
+    {
+        if (!$this->userSubscriptions->contains($userSubscription)) {
+            $this->userSubscriptions[] = $userSubscription;
+            $userSubscription->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserSubscription(UserSubscription $userSubscription): self
+    {
+        if ($this->userSubscriptions->removeElement($userSubscription)) {
+            // set the owning side to null (unless already changed)
+            if ($userSubscription->getOwner() === $this) {
+                $userSubscription->setOwner(null);
+            }
         }
 
         return $this;

@@ -4,13 +4,13 @@ namespace App\Entity;
 
 use App\Repository\ModuleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ModuleRepository::class)
  */
-class Module
+class Module implements OwnerInterface
 {
     /**
      * @ORM\Id
@@ -21,18 +21,25 @@ class Module
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Название модуля обязательно для заполнения")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Контент модуля обязателен для заполнения")
      */
     private $content;
 
     /**
-     * @ORM\ManyToMany(targetEntity=user::class, inversedBy="modules")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="modules")
      */
     private $owner;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $modifiedAt;
 
     public function __construct()
     {
@@ -68,26 +75,26 @@ class Module
         return $this;
     }
 
-    /**
-     * @return Collection|user[]
-     */
-    public function getOwner(): Collection
+    public function getOwner(): ?User
     {
-        return $this->owner;
+        return $this->owner->first();
     }
 
-    public function addOwner(user $owner): self
+    public function setOwner(User $owner): self
     {
-        if (!$this->owner->contains($owner)) {
-            $this->owner[] = $owner;
-        }
+        $this->owner = [$owner];
 
         return $this;
     }
 
-    public function removeOwner(user $owner): self
+    public function getModifiedAt(): ?\DateTimeInterface
     {
-        $this->owner->removeElement($owner);
+        return $this->modifiedAt;
+    }
+
+    public function setModifiedAt(\DateTimeInterface $modifiedAt): self
+    {
+        $this->modifiedAt = $modifiedAt;
 
         return $this;
     }

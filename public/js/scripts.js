@@ -14,4 +14,23 @@
       }
     }
   });
+
+  $(document).on('click', 'a[data-module-delete="1"]', function (e) {
+
+    e.preventDefault();
+
+    let this$ = $(this);
+
+    $.get(
+        this$.attr('href'),
+        {},
+        function (data) {
+          if (data && typeof data.success !== 'undefined' && data.success) {
+            this$.closest('tr').remove();
+          }
+        },
+        'json'
+    );
+  });
+
 })(jQuery);

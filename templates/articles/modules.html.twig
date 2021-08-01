@@ -1,0 +1,75 @@
+{% extends 'articles/base.html.twig' %}
+
+{% block title %}
+    Сгенерировать статью!
+{% endblock %}
+
+{% block content %}
+    <section>
+
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Модуль</th>
+                <th scope="col">Контент</th>
+                <th scope="col">Удалить</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for module in modules %}
+                <tr>
+                    <th scope="row">{{ modules.getPaginationData.firstItemNumber + loop.index - 1 }}</th>
+                    <td>{{ module.name }}</td>
+                    <td>
+                        <pre class="code" style="text-align: left;">{{ module.content }}</pre>
+                    </td>
+                    <td>
+                        {% if module.owner|length > 0 %}
+                            <a data-module-delete="1" href="{{ path('app_article_modules_delete', { id: module.id }) }}" class="text-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        {% else %}
+                            <i title="Системный модуль нельзя удалить" class="fas fa-trash"></i>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4"> Нет модулей</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {{ knp_pagination_render(modules) }}
+    </section>
+
+    <hr>
+
+    <section class="py-4">
+
+        <h1 class="mt-4">Добавить модуль</h1>
+
+        <div class="row">
+
+            <div class="col-xl-6">
+
+                {% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+                {{ form_errors(form) }}
+
+                {{ form_start(form) }}
+
+                {{ form_row(form.name) }}
+
+                {{ form_row(form.content) }}
+
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Добавить</button>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </section>
+{% endblock %}
