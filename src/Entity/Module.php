@@ -77,7 +77,7 @@ class Module implements OwnerInterface
 
     public function getOwner(): ?User
     {
-        return $this->owner->first();
+        return $this->owner->first() ? $this->owner->first() : null;
     }
 
     public function setOwner(User $owner): self

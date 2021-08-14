@@ -6,4 +6,75 @@
 
 {% block content %}
 
+   {% if subscriptions|length > 0 %}
+
+      <div class="row">
+
+         <div class="col-xl-8">
+
+            {% for flashMessage in app.flashes('template_message') %}
+               <div class="alert alert-success" role="alert">{{ flashMessage }}</div>
+            {% endfor %}
+
+            <section class="pricing py-2 row">
+               <div class="container">
+                  <div class="row">
+
+                     {% for subscription in subscriptions %}
+
+                        <div class="col-lg-4">
+                           <div class="card mb-5 mb-lg-0">
+                              <div class="card-body">
+                                 <h5 class="card-title text-uppercase text-center{{ subscription == current ?' current text-warning':' text-muted ' }}">
+                                    {{ subscription == current ?'<i class="fas fa-check"></i>':'' }}
+                                    {{ subscription.name }}
+                                 </h5>
+                                 <h6 class="card-price text-center">${{ subscription.price }}<span
+                                            class="period">/неделя</span>
+                                 </h6>
+                                 <hr>
+                                 <ul class="fa-ul">
+                                    <li class="{{ subscription.much ?'':'text-muted' }}"><span class="fa-li"><i
+                                                  class="fas fa-{{ subscription.much ?'check':'times' }}"></i></span>
+                                       Возможность создать более 1 статьи
+                                    </li>
+                                    <li class="{{ subscription.basic ?'':'text-muted' }}"><span class="fa-li"><i
+                                                  class="fas fa-{{ subscription.basic ?'check':'times' }}"></i></span>
+                                       Базовые возможности генератора
+                                    </li>
+                                    <li class="{{ subscription.pro ?'':'text-muted' }}"><span class="fa-li"><i
+                                                  class="fas fa-{{ subscription.pro ?'check':'times' }}"></i></span>
+                                       Продвинутые возможности генератора
+                                    </li>
+                                    <li class="{{ subscription.modules ?'':'text-muted' }}"><span class="fa-li"><i
+                                                  class="fas fa-{{ subscription.modules ?'check':'times' }}"></i></span>
+                                       Свои модули
+                                    </li>
+                                 </ul>
+
+                                 {% if subscription == current %}
+                                    <a href="#" class="btn btn-block btn-secondary text-uppercase" disabled="">Текущий
+                                       уровень</a>
+                                 {% elseif subscription.price > 0 and (current is empty or (current is not empty and current.price < subscription.price)) %}
+                                    <a href="{{ path('app_user_subscription_add', {id: subscription.id}) }}"
+                                       class="btn btn-block btn-primary text-uppercase">Оформить</a>
+                                 {% endif %}
+
+                              </div>
+                           </div>
+                        </div>
+
+                        {{ loop.index % 3 == 0 ?'</div><div class="row">' }}
+
+                     {% endfor %}
+                  </div>
+               </div>
+            </section>
+         </div>
+      </div>
+
+   {% else %}
+      Невозможно оформить подписку
+   {% endif %}
+
 {% endblock %}

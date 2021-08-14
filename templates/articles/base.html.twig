@@ -27,12 +27,12 @@
         <div class="sidebar-heading">BlaBlaArticle</div>
         <div class="list-group list-group-flush">
             <a href="dashboard.html" class="list-group-item list-group-item-action bg-light">Рабочий стол</a>
-            <a href="dashboard_create_article.html" class="list-group-item list-group-item-action active">Создать
+            <a href="dashboard_create_article.html" class="list-group-item list-group-item-action">Создать
                 статью</a>
             <a href="dashboard_history.html" class="list-group-item list-group-item-action bg-light">История статей</a>
-            <a href="{{ path('app_subscribtion_list') }}" class="list-group-item list-group-item-action bg-light">Подписка</a>
+            <a href="{{ path('app_subscription_list') }}" class="list-group-item list-group-item-action{{ app.request.get('_route') == 'app_subscription_list' ? ' active' : ' bg-light'}}">Подписка</a>
             <a href="dashboard_profile.html" class="list-group-item list-group-item-action bg-light">Профиль</a>
-            <a href="dashboard_modules.html" class="list-group-item list-group-item-action bg-light">Модули генератора</a>
+            <a href="{{ path('app_article_modules') }}" class="list-group-item list-group-item-action{{ app.request.get('_route') == 'app_article_modules' ? ' active' : ' bg-light'}}">Модули генератора</a>
         </div>
     </div>
 
@@ -49,7 +49,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Выйти</a>
+                        <a class="nav-link" href="{{ path('app_logout') }}">Выйти</a>
                     </li>
                 </ul>
             </div>

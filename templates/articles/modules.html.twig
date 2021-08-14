@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+
     <section>
 
         <table class="table table-hover table-bordered">
@@ -17,7 +18,9 @@
             </tr>
             </thead>
             <tbody>
+
             {% for module in modules %}
+
                 <tr>
                     <th scope="row">{{ modules.getPaginationData.firstItemNumber + loop.index - 1 }}</th>
                     <td>{{ module.name }}</td>
@@ -39,10 +42,12 @@
                     <td colspan="4"> Нет модулей</td>
                 </tr>
             {% endfor %}
+
             </tbody>
         </table>
 
         {{ knp_pagination_render(modules) }}
+
     </section>
 
     <hr>

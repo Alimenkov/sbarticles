@@ -42,7 +42,7 @@ class UserSubscription implements OwnerInterface
      * @ORM\ManyToOne(targetEntity=Subscription::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $subscribtion;
+    private $subscription;
 
     public function getId(): ?int
     {
@@ -97,14 +97,14 @@ class UserSubscription implements OwnerInterface
         return $this;
     }
 
-    public function getSubscribtion(): ?Subscription
+    public function getSubscription(): ?Subscription
     {
-        return $this->subscribtion;
+        return $this->subscription;
     }
 
-    public function setSubscribtion(?Subscription $subscribtion): self
+    public function setSubscription(?Subscription $subscription): self
     {
-        $this->subscribtion = $subscribtion;
+        $this->subscription = $subscription;
 
         return $this;
     }

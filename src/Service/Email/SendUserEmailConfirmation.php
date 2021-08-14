@@ -18,15 +18,15 @@ class SendUserEmailConfirmation
 
     public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer)
     {
-
         $this->helper = $helper;
+
         $this->mailer = $mailer;
     }
 
     public function send(PasswordAuthenticatedUserInterface $user)
     {
         $signatureComponents = $this->helper->generateSignature(
-            'app_rigister_confirmation',
+            'app_register_confirmation',
             $user->getId(),
             $user->getEmail()
         );

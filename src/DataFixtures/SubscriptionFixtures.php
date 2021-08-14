@@ -5,9 +5,9 @@ namespace App\DataFixtures;
 use App\Entity\Subscription;
 
 
-class SubscribtionFixtures extends BaseFixtures
+class SubscriptionFixtures extends BaseFixtures
 {
-    protected $subscribtions = [
+    protected $subscriptions = [
         [
             'name' => 'Free',
             'price' => 0,
@@ -38,7 +38,7 @@ class SubscribtionFixtures extends BaseFixtures
     {
         $this->manager = $manager;
 
-        foreach ($this->subscribtions as $fields) {
+        foreach ($this->subscriptions as $fields) {
 
             $this->makeOne(Subscription::class, function (Subscription $subscription) use ($manager, $fields) {
 

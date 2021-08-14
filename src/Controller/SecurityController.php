@@ -7,6 +7,8 @@ use App\Form\LoginFormType;
 use App\Form\Model\UserLoginFormModel;
 use App\Form\RegistrationFormType;
 use App\Security\Utils\AuthenticationRemeberMeUtils;
+use App\Service\ChangeEmail;
+use App\Service\ChangeProfile;
 use App\Service\Email\SendUserEmailConfirmation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,6 +65,7 @@ class SecurityController extends AbstractController
 
         /** @var PasswordAuthenticatedUserInterface $user */
         $user = new User();
+
         $form = $this->createForm(RegistrationFormType::class, $user);
 
         $form->handleRequest($request);
@@ -70,6 +73,7 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $plainPasswd = $form->get('plainPassword')->getData();
+
             $confirmPasswd = $form->get('confirmPassword')->getData();
 
             if (strcasecmp($plainPasswd, $confirmPasswd) != 0) {
@@ -97,7 +101,6 @@ class SecurityController extends AbstractController
                     'security_message',
                     'На вашу почту отправлено письмо для подтверждения регистрации'
                 );
-
             }
         }
 
@@ -123,17 +126,17 @@ class SecurityController extends AbstractController
             $text = 'На ваш e-mail выслано письмо для верификации аккаунта!';
         }
 
-        return $this->render('security/account-verification.html.twig',
+        return $this->render('security/account_verification.html.twig',
             ['text' => $text]
         );
     }
 
     /**
-     * @Route("/rigister-confirmation", name="app_rigister_confirmation")
+     * @Route("/rigister-confirmation", name="app_register_confirmation")
+     * @isGranted ("IS_AUTHENTICATED_FULLY")
      */
     public function registerConfirmation(Request $request, VerifyEmailHelperInterface $helper)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
 
         // Do not get the User's Id or Email Address from the Request object
@@ -157,6 +160,35 @@ class SecurityController extends AbstractController
         $this->addFlash('success', 'Ваш e-mail адрес подтверждён.');
 
         return $this->redirectToRoute('app_mainpage');
+    }
+
+    /**
+     * @Route("/profile", name="app_profile")
+     * @isGranted ("IS_AUTHENTICATED_FULLY")
+     */
+    public function profile(ChangeProfile $changeProfile): Response
+    {
+        $form = $changeProfile->makeForm();
+
+        if ($changeProfile->save()) {
+            return $this->redirectToRoute('app_profile');
+        }
+
+        return $this->render('security/profile.html.twig', [
+            'profileForm' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/change-email", name="app_change_email_confirmation")
+     * @isGranted ("IS_AUTHENTICATED_FULLY")
+     */
+    public function changeEmail (ChangeEmail $changeEmail, Request $request): Response
+    {
+        $changeEmail->tryToChangeEmail($request);
+
+        return $this->redirectToRoute('app_profile');
     }
 
     /**

@@ -50,7 +50,7 @@ class Subscription
     private $modules;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserSubscription::class, mappedBy="subscribtion", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=UserSubscription::class, mappedBy="subscription", orphanRemoval=true)
      */
     private $userSubscriptions;
 
@@ -148,7 +148,7 @@ class Subscription
     {
         if (!$this->userSubscriptions->contains($userSubscription)) {
             $this->userSubscriptions[] = $userSubscription;
-            $userSubscription->setSubscribtion($this);
+            $userSubscription->setSubscription($this);
         }
 
         return $this;
@@ -158,8 +158,8 @@ class Subscription
     {
         if ($this->userSubscriptions->removeElement($userSubscription)) {
             // set the owning side to null (unless already changed)
-            if ($userSubscription->getSubscribtion() === $this) {
-                $userSubscription->setSubscribtion(null);
+            if ($userSubscription->getSubscription() === $this) {
+                $userSubscription->setSubscription(null);
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Subscription;
 use App\Entity\UserSubscription;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -36,15 +37,24 @@ class UserSubscriptionRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?UserSubscription
+    public function findActualUserSub($user): ?UserSubscription
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
+        $result = $this->createQueryBuilder('u')
+            ->leftJoin('u.subscription', 's')
+            ->andWhere('u.owner = :user and u.expiredAt >= :date')
+            ->setParameters(['user' => $user, 'date' => new \DateTimeImmutable()])
+            ->orderBy('s.price', 'DESC')
+            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
+
+        return !empty($result) ? $result[0] : null;
     }
-    */
+
+    public function findActualUserSubType($user): ?Subscription
+    {
+        $userSub = $this->findActualUserSub($user);
+
+        return !empty($userSub) ? $userSub->getSubscription() : null;
+    }
 }

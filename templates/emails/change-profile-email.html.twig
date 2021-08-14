@@ -1,0 +1,21 @@
+{% extends "emails/base.html.twig" %}
+
+{% block title %}
+    Подтверждение смены адреса электронной почты
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <table>
+            <tr>
+                <td>
+                    {% block titles %}
+
+                        <h1>Запрос на смену email-адреса в аккаунте сайта!</h1>
+                        <a href="{{ signedUrl }}">Подтвердить новый email</a>
+                    {% endblock %}
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
