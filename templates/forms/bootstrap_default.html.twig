@@ -1,4 +1,4 @@
-{% use 'bootstrap_4_layout.html.twig' with form_row, form_errors %}
+{% use 'bootstrap_4_layout.html.twig' with form_row, form_errors, file_widget %}
 
 {%- block form_row -%}
     {%- set widget_attr = {} -%}
@@ -67,9 +67,20 @@
         </{{ element|default('label') }}>
     {%- else -%}
         {%- if errors|length > 0 -%}
-            <div id=\"{{ id }}_errors\" class=\"mb-2\">
-                {{- form_errors(form) -}}
+            {%- set widget_attr = {} -%}
+            {%- if help is not empty -%}
+                {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+            {%- endif -%}
+
+            <div class="{% if row_attr.class is defined %}{{ row_attr.class }}{% endif %}"{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+                {{- form_widget(form, widget_attr) -}}
+                {{- form_label(form) -}}
+                {{- form_help(form) -}}
             </div>
         {%- endif -%}
     {%- endif -%}
 {%- endblock form_label %}
+
+{% block file_widget -%}
+    {{- block('form_widget_simple') -}}
+{% endblock %}

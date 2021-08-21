@@ -5,7 +5,7 @@ namespace App\Service;
 
 
 use App\Entity\User;
-use App\Form\Model\UserProfile;
+use App\Form\Model\UserProfileFormModel;
 use App\Form\ProfileFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormError;
@@ -134,9 +134,9 @@ class ChangeProfile
         $this->changeEmail->send($email);
     }
 
-    protected function makeFormModel(): UserProfile
+    protected function makeFormModel(): UserProfileFormModel
     {
-        $formModel = new UserProfile();
+        $formModel = new UserProfileFormModel();
 
         $formModel->name = $this->user->getName();
 

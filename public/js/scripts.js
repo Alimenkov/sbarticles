@@ -33,4 +33,34 @@
     );
   });
 
+
+  //promoted words
+  const addFormToCollection = (e) => {
+
+    const wrap$ = $('.' + e.currentTarget.dataset.collectionHolderClass);
+
+    const size = wrap$.find('.row').length;
+
+    const html = wrap$.attr('data-prototype').replace(
+        /__name__/g,
+        size
+    );
+
+    const item$ = $(html).addClass('row');
+
+    item$.find('.form-label-group').wrap('<div class="col"></div>');
+
+    wrap$.append(item$);
+  };
+
+  document
+      .querySelectorAll('.add_item_link')
+      .forEach(btn => btn.addEventListener("click", addFormToCollection));
+
+  for (let n = 0; n < 3; n++) {
+    $('.add_item_link').trigger('click');
+  }
+
+  //promoted words end
+
 })(jQuery);

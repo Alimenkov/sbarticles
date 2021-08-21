@@ -3,11 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Module;
+use App\Form\ArticleFormType;
+use App\Form\Model\ArticleFormModel;
 use App\Form\ModuleFormType;
+use App\Form\RegistrationFormType;
 use App\Repository\ModuleRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,10 +31,22 @@ class ArticleController extends AbstractController
     /**
      * @Route("/article-create", name="app_article_create")
      */
-    public function article_create(): Response
+    public function article_create(Request $request): Response
     {
 
-        return $this->render('articles/create.html.twig');
+        $articleForm = new ArticleFormModel();
+
+        $form = $this->createForm(ArticleFormType::class, $articleForm);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+        }
+
+        return $this->render('articles/create.html.twig', [
+            'articleForm' => $form->createView()
+        ]);
     }
 
     /**

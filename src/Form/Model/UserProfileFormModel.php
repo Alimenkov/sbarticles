@@ -6,7 +6,7 @@ namespace App\Form\Model;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\UniqueEmail;
 
-class UserProfile
+class UserProfileFormModel
 {
     /**
      * @Assert\NotBlank(message = "Заполните имя")

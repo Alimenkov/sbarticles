@@ -33,7 +33,7 @@
         <a class="js-scroll-trigger" href="{{ path('app_article_create') }}">Создать статью</a>
         <a class="js-scroll-trigger" href="#services">Сервисы</a>
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <a class="js-scroll-trigger" href="#author">Автор</a>
+            <a class="js-scroll-trigger" href="{{ path('app_profile') }}">{{ app.user.name }}</a>
             <a class="btn btn-primary" href="{{ path('app_logout') }}">Выйти</a>
         {% else %}
             <a class="btn btn-primary" href="{{ path('app_login') }}">Войти</a>
@@ -47,7 +47,7 @@
 {% block verified_message %}
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and is_granted('IS_VERIFIED') == false %}
         <div class="alert alert-info" role="alert">Ваш аккаунт не верифицирован! <a
-                    href="{{ path('app_account-verification') }}">Отправить письмо с подтверждением ещё раз</a></div>
+                    href="{{ path('app_account_verification') }}">Отправить письмо с подтверждением ещё раз</a></div>
     {% endif %}
 {% endblock %}
 {% block body %}{% endblock %}

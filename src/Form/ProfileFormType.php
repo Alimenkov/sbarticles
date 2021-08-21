@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Form\Model\UserProfile;
+use App\Form\Model\UserProfileFormModel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -45,7 +45,7 @@ class ProfileFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => UserProfile::class,
+            'data_class' => UserProfileFormModel::class,
         ]);
     }
 }
