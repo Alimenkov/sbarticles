@@ -84,3 +84,7 @@
 {% block file_widget -%}
     {{- block('form_widget_simple') -}}
 {% endblock %}
+
+{% block _article_form_images_entry_widget %}
+    <div class="immutable" id="article_form_images___name__"><div class="form-group"><input type="file" id="article_form_images___name___image" name="article_form[images][__name__][image]" /></div></div>
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Module;
+use App\Service\CheckModuleImg;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\Validator\Constraints\Date;
 
@@ -79,6 +80,13 @@ class ModuleFixtures extends BaseFixtures implements DependentFixtureInterface
         ]
     ];
 
+    private CheckModuleImg $checkModuleImg;
+
+    public function __construct(CheckModuleImg $checkModuleImg)
+    {
+        $this->checkModuleImg = $checkModuleImg;
+    }
+
     public function load($manager)
     {
         $this->manager = $manager;
@@ -90,6 +98,7 @@ class ModuleFixtures extends BaseFixtures implements DependentFixtureInterface
                 $module
                     ->setName($fields['name'])
                     ->setContent($fields['content'])
+                    ->setImg($this->checkModuleImg->check($fields['content']))
                     ->setModifiedAt(new \DateTime());
 
                 $manager->persist($module);

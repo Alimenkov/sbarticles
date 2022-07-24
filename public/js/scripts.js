@@ -39,14 +39,18 @@
 
     const wrap$ = $('.' + e.currentTarget.dataset.collectionHolderClass);
 
-    const size = wrap$.find('.row').length;
+    const size = wrap$.children('div').length;
 
     const html = wrap$.attr('data-prototype').replace(
         /__name__/g,
         size
     );
 
-    const item$ = $(html).addClass('row');
+    const item$ = $(html);
+
+    if (!item$.hasClass('immutable')) {
+      item$.addClass('row')
+    }
 
     item$.find('.form-label-group').wrap('<div class="col"></div>');
 

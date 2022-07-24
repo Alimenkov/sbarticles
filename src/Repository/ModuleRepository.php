@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Module;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -26,12 +27,46 @@ class ModuleRepository extends ServiceEntityRepository
 
     public function findAllUserModules(int $id): Query
     {
-        return $this->createQueryBuilder('m')
-            ->leftJoin('m.owner', 'o')
-            ->andWhere('o.id = :val or o.id is NULL')
-            ->setParameter('val', $id)
+        return $this->findUserModulesQB($id)
             ->orderBy('m.modifiedAt', 'DESC')
             ->getQuery();
+    }
+
+    public function findModules(?int $limit = 0, ?int $userId = null, ?bool $onlyImg = null): array
+    {
+        if (!empty($userId)) {
+            $qb = $this->findUserModulesQB($userId);
+        } else {
+            $qb = $this->findCommonModulesQB();
+        }
+
+        if (is_bool($onlyImg)) {
+            $qb->andWhere("m.img = " . ($onlyImg ? 'true' : 'false'));
+        }
+
+        return $qb->orderBy('RANDOM()')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    protected function findUserModulesQB(int $id): QueryBuilder
+    {
+        return $this->findCommonModulesQB()
+            ->orWhere('o.id = :val')
+            ->setParameter('val', $id);
+    }
+
+    protected function findCommonModulesQB(): QueryBuilder
+    {
+        return $this->getModuleWithOwnerQB()
+            ->andWhere('o.id is NULL');
+    }
+
+    protected function getModuleWithOwnerQB(): QueryBuilder
+    {
+        return $this->createQueryBuilder('m')
+            ->leftJoin('m.owner', 'o');
     }
 
 

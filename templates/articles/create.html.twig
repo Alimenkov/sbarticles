@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="row">
 
         <div class="col-xl-6">
@@ -79,14 +80,17 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="card-title">Изображения</label>
 
-                    {{ form_label(articleForm.images) }}
+                    <div class="images"
+                         data-prototype="{{ form_widget(articleForm.images.vars.prototype)|e('html_attr') }}">
 
-                    {{ form_widget(articleForm.images, { 'attr': {'style': 'opacity: 1'} }) }}
-
+                    </div>
+                    <button type="button" class="btn btn-xs btn-primary add_item_link"
+                            data-collection-holder-class="images">
+                        Добавить
+                    </button>
                 </div>
-
-                {{ form_rest(articleForm) }}
 
                 <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Создать</button>
 

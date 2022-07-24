@@ -41,6 +41,11 @@ class Module implements OwnerInterface
      */
     private $modifiedAt;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $img;
+
     public function __construct()
     {
         $this->owner = new ArrayCollection();
@@ -95,6 +100,18 @@ class Module implements OwnerInterface
     public function setModifiedAt(\DateTimeInterface $modifiedAt): self
     {
         $this->modifiedAt = $modifiedAt;
+
+        return $this;
+    }
+
+    public function getImg(): ?bool
+    {
+        return $this->img;
+    }
+
+    public function setImg(?bool $img): self
+    {
+        $this->img = $img;
 
         return $this;
     }
